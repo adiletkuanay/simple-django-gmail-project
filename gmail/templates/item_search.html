@@ -1,0 +1,10 @@
+{% extends 'inbox.html' %}
+
+<h1>Search Results for "{{query}}"</h1>
+<ul>
+{% for message in messages %}
+    <li>{{ message.subject }}</li>
+{% empty %}
+    <li>No message found</li>
+{% endfor %}
+</ul>

@@ -1,0 +1,99 @@
+{% block content %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="wrapper">
+    <h2>Login</h2>
+    <form method="POST">
+        {% csrf_token %}
+      <div class="input-box">
+          <label>Username</label>
+        <input type="text" name="username" placeholder="Enter your username" required>
+      </div>
+      <div class="input-box">
+          <label>Password</label>
+        <input type="password" name="password" placeholder="Enter your password" required>
+      </div>
+      <div class="input-box button">
+        <input type="Submit" value="Login">
+      </div>
+    </form>
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+    <div class="text">
+        <h3>Don't have an account? <a href="{% url 'register' %}">Signup</a></h3>
+      </div>
+  </div>
+</body>
+</html>
+{% block styles %}
+<style type="text/css">
+    /* Apply default styles to all elements */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Apply styles to the wrapper container */
+.wrapper {
+  width: 80%;
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
+
+/* Apply styles to the form elements */
+.input-box {
+  margin-bottom: 20px;
+}
+
+.input-box label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.input-box input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Apply styles to the submit button */
+.button input {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.button input:hover {
+  background-color: #3e8e41;
+}
+
+/* Apply styles to the error messages */
+.error {
+  margin-top: 10px;
+  color: red;
+}
+
+/* Apply styles to the "Don't have an account?" text */
+.text {
+  margin-top: 20px;
+  text-align: center;
+}
+
+</style>
+{% endblock %}
+{% endblock %}

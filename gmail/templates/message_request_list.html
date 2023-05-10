@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Message Request List</title>
+</head>
+<body>
+    <h1>Message Request List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Sender</th>
+                <th>Recipient</th>
+                <th>Subject</th>
+                <th>Status</th>
+                {% if request.user.is_staff %}
+                                <th scope="col">Actions</th>
+                            {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for message_request in message_requests %}
+                <tr>
+                    <td>{{ message_request.sender.username }}</td>
+                    <td>{{ message_request.recipient.username }}</td>
+                    <td>{{ message_request.subject }}</td>
+                    <td>{{ message_request.status }}</td>
+                                    {% if request.user.is_staff %}
+
+                        <td>
+                                        {% if message_request.status == 'pending' %}
+                                            <a href="{% url 'approve_message_request' message_request.id %}" class="btn btn-sm btn-success"><i class="fas fa-check"></i> Approve</a>
+                                            <a href="{% url 'reject_message_request' message_request.id %}" class="btn btn-sm btn-danger"><i class="fas fa-times"></i> Reject</a>
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No message requests found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

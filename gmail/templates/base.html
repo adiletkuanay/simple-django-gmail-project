@@ -1,0 +1,320 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Mail{% endblock %}</title>
+        <script src="https://cdn.ckeditor.com/ckeditor5/24.0.0/balloon/ckeditor.js"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'mail/styles.css' %}">
+        <link rel="shortcut icon" href="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" >
+    </head>
+    <body>
+      <div class="overlay"></div>
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white pl-0">
+          <button type="button" id="sidebarCollapse" class="btn btn-link text-secondary mr-2 rounded-circle">
+            <i class="fas fa-bars"></i>
+        </button>
+            <a class="navbar-brand ml-2" href="{% url '' %}"><img class="gb_ua" src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_default_1x_r2.png" srcset="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_default_1x_r2.png 1x, https://ssl.gstatic.com/ui/v1/icons/mail/rfr/logo_gmail_lockup_default_2x_r2.png 2x " alt="" aria-hidden="true" style="width:109px;height:40px"></a>
+            <!-- search bar -->
+            <form class="inline-form col-md-9 p-0 srch-form" method="get" action="{% url 'item_search' %}">
+              <div class="input-group srchbar py-1">
+                <div class="input-group-prepend border-0 pl-1">
+                  <button id="button-addon4" type="button" class="btn btn-link text-secondary srch_btn"><i class="fa fa-search"></i></button>
+                </div>
+                <input type="search" name="search_query" placeholder="Search mail" aria-describedby="button-addon4" class="form-control bg-transparent border-0 srch-inp" >
+              </div>
+            </form> 
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'profile' %}" style="color: black;">Hello, {{ request.user }}</a></li>
+            {% if user.is_staff %}
+            <a href="{% url 'message_request_list' %}"><p>Запросы</p></a>
+            {% endif %}
+            <li><button  class="btn"><a href="{% url 'logout' %}">Выйти</a></button></li>
+            {% else %}
+            <li><button class="btn" ><a href="{% url 'login' %}">Войти</a></button></li>
+            {% endif %}
+          </nav>
+    <div class="container">
+    	          <div class="side-bar">
+     <div class="side-bar-content">
+         <div class="button-wrapper">
+             <button class="compose-button">
+                 <img src="https://i.ibb.co/6nk5kzD/Screen-Shot-2018-05-18-at-12-07-42-PM.png" alt="">
+                 {% if user.is_staff %}
+                 <a href="{% url 'compose' %}"><p>Написать</p></a>
+                 {% else %}
+                 	{% if user.is_authenticated %}
+                 	<a href="{% url 'create_message_request' %}"><p>Написать</p></a>
+                 	{% else %}
+                 	{% endif %}
+                 	{% endif %}
+
+             </button>
+         </div>
+         <div class="side-bar-items">
+           <div class="section">
+               <input
+               class="nav-item"
+               name="nav"
+               type="radio"
+               id="inbox"
+               checked
+             />
+             <input
+               class="nav-item"
+               name="nav"
+               type="radio"
+               id="starred"
+             />
+             <input
+               class="nav-item"
+               name="nav"
+               type="radio"
+               id="snoozed"
+             />
+             <input
+               class="nav-item"
+               name="nav"
+               type="radio"
+               id="sent"
+             />
+             <input
+               class="nav-item"
+               name="nav"
+               type="radio"
+               id="draft"
+             />
+             <input
+               class="nav-item"
+               name="nav"
+               type="radio"
+               id="spam"
+             />
+             <input
+               class="nav-item"
+               name="nav"
+               type="radio"
+               id="trash"
+             />
+             <div class="item-wrapper"> 
+                 <label  for="inbox">
+                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path opacity="0.3" d="M10.0082 15C8.77484 15 7.7165 14.325 7.13317 13.3334H4.1665V15.8334H15.8332V13.3334H12.8748C12.2998 14.325 11.2332 15 10.0082 15Z" fill="currentcolor"/>
+                     <path fill-rule="evenodd" clip-rule="evenodd" d="M15.8333 2.5H4.16667C3.25 2.5 2.5 3.25 2.5 4.16667V15.8333C2.5 16.75 3.24167 17.5 4.16667 17.5H15.8333C16.75 17.5 17.5 16.75 17.5 15.8333V4.16667C17.5 3.25 16.75 2.5 15.8333 2.5ZM15.8333 15.8333H4.16667V13.3333H7.13333C7.70833 14.325 8.775 15 10.0083 15C11.2417 15 12.3 14.325 12.8833 13.3333H15.8333V15.8333ZM11.6667 11.6667H15.8333V4.16667H4.16667V11.6667H8.33333C8.33333 12.5833 9.08333 13.3333 10 13.3333C10.9167 13.3333 11.6667 12.5833 11.6667 11.6667Z" fill="currentcolor"/>
+                   </svg> 
+                   <div class="item-info">
+                   	<a href="{% url 'inbox' %}"><p>Inbox</p> </a>
+                   </div> 
+                 </label>             
+             </div>
+             <div class="item-wrapper">
+               <label for="sent">
+                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path opacity="0.3" d="M3.33301 6.87502L9.59134 7.70836L3.34134 5.02502L3.33301 6.87502Z" fill="currentcolor"/>
+                     <path opacity="0.3" d="M3.34134 14.975L9.59134 12.2916L3.33301 13.125L3.34134 14.975Z" fill="currentcolor"/>
+                     <path fill-rule="evenodd" clip-rule="evenodd" d="M1.67484 2.5L1.6665 8.33333L14.1665 10L1.6665 11.6667L1.67484 17.5L19.1665 10L1.67484 2.5ZM3.33317 6.875V5.025L9.5915 7.70833L3.33317 6.875ZM3.3415 13.125V14.975L9.59984 12.2917L3.3415 13.125Z" fill="currentcolor"/>
+                   </svg>    
+                   <div class="item-info">
+                       <p>Sent</p> 
+                   </div> 
+               </label>                    
+             </div>
+             <div class="item-wrapper">
+               <label for="draft">
+                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path opacity="0.3" d="M10.8333 3.33325H5V16.6666H15V7.49992H10.8333V3.33325Z" fill="currentcolor"/>
+                     <path fill-rule="evenodd" clip-rule="evenodd" d="M5.00016 1.66663H11.6668L16.6668 6.66663V16.6666C16.6668 17.5833 15.9168 18.3333 15.0002 18.3333H4.99183C4.07516 18.3333 3.3335 17.5833 3.3335 16.6666V3.33329C3.3335 2.41663 4.0835 1.66663 5.00016 1.66663ZM5.00016 16.6666H15.0002V7.49996H10.8335V3.33329H5.00016V16.6666Z" fill="currentcolor"/>
+                   </svg>
+                   <div class="item-info">
+                       <p>Draft</p> 
+                   </div>
+               </label>      
+             </div>
+             <div class="item-wrapper">
+               <label for="spam">
+                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                     <path opacity="0.3" fill-rule="evenodd" clip-rule="evenodd" d="M7.58317 4.16663L4.1665 7.58329V12.4166L7.58317 15.8333H12.4165L15.8332 12.4166V7.58329L12.4165 4.16663H7.58317ZM9.99984 14.1666C9.5415 14.1666 9.1665 13.7916 9.1665 13.3333C9.1665 12.875 9.5415 12.5 9.99984 12.5C10.4582 12.5 10.8332 12.875 10.8332 13.3333C10.8332 13.7916 10.4582 14.1666 9.99984 14.1666ZM9.1665 11.6666H10.8332V5.83329H9.1665V11.6666Z" fill="currentcolor"/>
+                     <path fill-rule="evenodd" clip-rule="evenodd" d="M6.89167 2.5H13.1083L17.5 6.89167V13.1083L13.1083 17.5H6.89167L2.5 13.1083V6.89167L6.89167 2.5ZM12.4167 15.8333L15.8333 12.4167V7.58333L12.4167 4.16667H7.58333L4.16667 7.58333V12.4167L7.58333 15.8333H12.4167Z" fill="currentcolor"/>
+             		<path d="M9.99984 14.1667C10.4601 14.1667 10.8332 13.7936 10.8332 13.3333C10.8332 12.8731 10.4601 12.5 9.99984 12.5C9.5396 12.5 9.1665 12.8731 9.1665 13.3333C9.1665 13.7936 9.5396 14.1667 9.99984 14.1667Z" fill="currentcolor"/>
+                     <rect x="9.1665" y="5.83337" width="1.66667" height="5.83333" fill="currentcolor"/>
+                   </svg>  
+                   <div class="item-info">
+                       <p>Spam</p> 
+                   </div> 
+               </label>      
+             </div>
+             
+           </div>
+          </div>
+      </div>
+  </div>
+
+      <div class="remaining-content">
+      	{% block contentinbox %}
+      	{% endblock %}
+      </div>
+  </div>
+  {% load custom_filters %}
+
+<h2 style="text-align: center; font-size: 30px; padding-top: 30px;">Last Viewed Messages:</h2>
+{% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No messages found.</p>
+{% endif %}
+
+
+	</body>
+</html>
+{% block styles %}
+<style type="text/css">
+	   .message-history {
+        text-align: center;
+        font-size: 30px;
+        padding-top: 30px;
+    }
+
+    .message-card {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .message-card img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        margin-bottom: 10px;
+    }
+
+    .message-card p {
+        margin-bottom: 5px;
+    }
+
+    .message-card a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+    }
+	body {
+		background: #f6f8fc;
+	}
+	*{
+		list-style: none;
+	}
+	a{
+		text-decoration: none;
+	}
+/* Reset default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Container styles */
+.side-bar {
+	padding-top: 50px;
+  width: 150px;
+  margin-left: -140px;
+}
+
+/* Sidebar content styles */
+.side-bar-content {
+  padding: 20px;
+
+ }
+.container {
+  display: flex;
+}
+.remaining-content {
+      flex: 1;
+      margin-left: 10px;
+      padding-top: 65px;
+}
+
+/* Compose button styles */
+.compose-button {
+  background-color: #eaf1fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+.compose-button p {
+	color: black;
+	padding-top: 12px;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+}
+.compose-button img {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+/* Sidebar items styles */
+.side-bar-items {
+  margin-top: 20px;
+}
+
+/* Section styles */
+.section {
+  margin-bottom: 10px;
+}
+
+/* Navigation item styles */
+.nav-item {
+  display: none;
+}
+
+/* Styling radio buttons */
+.nav-item + label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.nav-item + label svg {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  fill: currentColor;
+}
+
+/* Item info styles */
+.item-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Active item styles */
+.nav-item:checked + label {
+  font-weight: bold;
+}
+
+/* Unread count styles */
+.item-info p:last-child {
+  color: #999999;
+}
+
+</style>
+{% endblock %}

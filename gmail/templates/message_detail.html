@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Detail
+{% endblock %}
+
+{% block contentinbox %}
+    <h1>Message Detail</h1>
+    <h3>Subject: {{ message.subject }}</h3>
+    <p>From: {{ message.sender.username }}</p>
+    <p>Timestamp: {{ message.timestamp }}</p>
+    <p>{{ message.body }}</p>
+    {% if not message.is_read %}
+        <p>Marked as read.</p>
+    {% endif %}
+    <a href="{% url 'inbox' %}">Back to Inbox</a>
+{% endblock %}

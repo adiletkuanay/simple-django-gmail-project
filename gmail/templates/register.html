@@ -1,0 +1,106 @@
+{% block content %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="wrapper">
+    <h2>Registration</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="input-box">
+            {{ form.username.label }}
+            {{ form.username }}
+        </div>
+        <div class="input-box">
+            {{ form.email.label }}
+            {{ form.email }}
+        </div>
+        <div class="input-box">
+            {{ form.password1.label }}
+            {{ form.password1 }}
+        </div>
+        <div class="input-box">
+            {{ form.password2.label }}
+            {{ form.password2 }}
+        </div>
+      <div class="input-box button">
+        <input type="Submit" value="Register Now">
+      </div>
+    </form>
+    <div class="error" style="color: red">
+            {{ form.errors }}
+    </div>
+    <div class="text">
+        <h3>Already have an account? <a href="{% url 'login' %}">Login now</a></h3>
+      </div>
+  </div>
+</body>
+</html>
+{% block styles %}
+<style type="text/css">
+    /* Apply default styles to all elements */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Apply styles to the wrapper container */
+.wrapper {
+  width: 80%;
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
+
+/* Apply styles to the form elements */
+.input-box {
+  margin-bottom: 20px;
+}
+
+.input-box label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.input-box input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Apply styles to the submit button */
+.button input {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.button input:hover {
+  background-color: #3e8e41;
+}
+
+/* Apply styles to the error messages */
+.error {
+  margin-top: 10px;
+}
+
+/* Apply styles to the "Already have an account?" text */
+.text {
+  margin-top: 20px;
+  text-align: center;
+}
+
+</style>
+{% endblock %}
+{% endblock %}
